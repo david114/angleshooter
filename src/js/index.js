@@ -1,11 +1,24 @@
+/* eslint-disable radix */
+/* eslint-disable max-len */
 import 'regenerator-runtime/runtime';
 
-const fieldElement = document.getElementById('main-container');
+const fieldElement = document.getElementById('playing-field');
 const ballElement = document.getElementById('ball');
+const bounceLabel = document.getElementById('bounce-label');
+const angleLabel = document.getElementById('angle-label');
+const trailLabel = document.getElementById('trail-label');
 
 const field = {
     width: fieldElement.clientWidth,
     height: fieldElement.clientHeight,
+};
+
+const finish = {
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+    side: null,
 };
 
 const ball = {
@@ -13,6 +26,13 @@ const ball = {
     height: ballElement.clientHeight,
     x: ballElement.offsetLeft,
     y: ballElement.offsetTop,
+    direction: 'left-bottom',
+    bounces: 0,
+    trails: 0,
+    additionX: 0,
+    additionY: 0,
+    angle: 0,
+    speed: 5,
 };
 
 function setBall(x, y) {
@@ -20,6 +40,73 @@ function setBall(x, y) {
     ballElement.style.top = `${y}px`;
     ball.x = x;
     ball.y = y;
+}
+
+function collisionCheck() {
+    return new Promise((resolve) => {
+        if (finish.side === 'left' || finish.side === 'right') {
+            if (ball.y >= finish.y && ball.y + ball.height <= finish.y + finish.height) {
+                // Rechts || Links
+                if (finish.side === 'right' && ball.x + ball.width >= finish.x) {
+                    resolve(true);
+                }
+                if (finish.side === 'left' && (finish.x - ball.x < 2 && finish.x - ball.x > -2)) {
+                    resolve(true);
+                }
+            }
+        } else if (finish.side === 'top') {
+            if (ball.y - finish.y < 1 && ball.y - finish.y > -1) {
+                if (ball.x >= finish.x && ball.x < finish.x + finish.width) {
+                    console.log('asdsad');
+                    resolve(true);
+                }
+            }
+        } else if (finish.side === 'bottom') {
+            if ((ball.y + ball.height) - finish.y < 1 && (ball.y + ball.height) - finish.y > -1) {
+                if (ball.x >= finish.x && ball.x < finish.x + finish.width) {
+                    resolve(true);
+                }
+            }
+        }
+        resolve(false);
+    });
+}
+
+function generateFinish() {
+    const fieldSides = ['left', 'right', 'top', 'bottom'];
+    const randomSide = fieldSides[Math.floor(Math.random() * fieldSides.length)];
+    const finishElement = document.createElement('div');
+    finishElement.classList = 'finish';
+    finish.side = randomSide;
+
+    if (randomSide === 'left' || randomSide === 'right') {
+        const randomY = Math.random() * (field.height - 96) + 5;
+        finishElement.style.width = '1px';
+        finishElement.style.height = '128px';
+        finishElement.style.top = `${randomY}px`;
+        finish.width = 1;
+        finish.height = 128;
+        finish.y = randomY;
+        finish.x = 0;
+        if (randomSide === 'right') {
+            finishElement.style.left = `${field.width}px`;
+            finish.x = field.width;
+        }
+    } else {
+        const randomX = Math.random() * (field.width - 96) + 5;
+        finishElement.style.width = '128px';
+        finishElement.style.height = '1px';
+        finishElement.style.left = `${randomX}px`;
+        finish.width = 128;
+        finish.height = 1;
+        finish.x = randomX;
+        finish.y = 0;
+        if (randomSide === 'bottom') {
+            finishElement.style.top = `${field.height}px`;
+            finish.y = field.height;
+        }
+    }
+    fieldElement.appendChild(finishElement);
 }
 
 function sinDegrees(angleDegrees) {
@@ -35,79 +122,117 @@ function getAxialAddition(angle) {
     let additionY;
 
     if (distanceToBorderX / distanceToBorderY >= distanceToBorderY / distanceToBorderX) {
-        additionX = distanceToBorderX / distanceToBorderY;
-        additionY = 1;
+        additionX = ball.speed / (distanceToBorderX / distanceToBorderY);
+        additionY = ball.speed;
     } else {
-        additionY = distanceToBorderY / distanceToBorderX;
-        additionX = 1;
+        additionY = ball.speed / (distanceToBorderY / distanceToBorderX);
+        additionX = ball.speed;
     }
     return { additionX, additionY };
 }
 
 function createTrail() {
     const trailElement = document.createElement('div');
-    trailElement.classList = 'trail';
-    trailElement.style.transform = `rotate(${50}deg)`;
-    trailElement.style.left = ballElement.style.left;
-    trailElement.style.top = ballElement.style.top;
+    trailElement.classList = 'trail trailRemove';
+    if (ball.direction === 'left-top' || ball.direction === 'right-bottom') {
+        trailElement.style.left = `${parseInt(ballElement.style.left) + (ball.width / 2)}px`;
+        trailElement.style.top = ballElement.style.top;
+    } else {
+        trailElement.style.left = ballElement.style.left;
+        trailElement.style.top = ballElement.style.top;
+    }
     fieldElement.appendChild(trailElement);
+
+    setTimeout(() => {
+        trailElement.remove();
+    }, 2500);
 }
 
-function moveBall(angle) {
-    let currentPosX = ball.x;
-    let currentPosY = ball.y;
-    let direction = 'left-bottom';
-    const { additionX, additionY } = getAxialAddition(angle);
-    let ctr = 0;
-    setInterval(frame, 5);
-    function frame() {
-        if (ctr % 8 === 0) createTrail();
-        ctr++;
-        if (currentPosX >= field.width - ball.width || currentPosY >= field.height - ball.height || currentPosY < 0 || currentPosX < 0) {
-            // const newColor = colors[Math.floor(Math.random() * colors.length)];
-            // ballElement.setAttribute('style', `-webkit-filter: drop-shadow(0px 0px 9px ${newColor});`);
-            // ballElement.style.backgroundColor = newColor;
-            if (currentPosY <= 0) {
-                if (direction === 'left-top') direction = 'left-bottom';
-                else direction = 'right-bottom';
-            }
-            if (currentPosX <= 0) {
-                if (direction === 'right-bottom') direction = 'left-bottom';
-                else direction = 'left-top';
-            }
-            if (currentPosY >= field.height - ball.height) {
-                if (direction === 'left-bottom') direction = 'left-top';
-                else direction = 'right-top';
-            }
-            if (currentPosX >= field.width - ball.width) {
-                if (direction === 'left-top') direction = 'right-top';
-                else direction = 'right-bottom';
-            }
+async function frame() {
+    if (await collisionCheck()) return;
+    if (ball.trails % 4 === 0) {
+        createTrail();
+        trailLabel.innerHTML = fieldElement.children.length - 1;
+    }
+    /* Nur der Winkel verändert sich, nicht die Zunahme/Abnahme der Position in X oder Y Richtung */
+    if (ball.x >= field.width - ball.width || ball.y >= field.height - ball.height || ball.y < 0 || ball.x < 0) {
+        ball.bounces++;
+        bounceLabel.innerHTML = ball.bounces;
+        if (ball.y <= 0) {
+            if (ball.direction === 'left-top') ball.direction = 'left-bottom';
+            else ball.direction = 'right-bottom';
         }
-        if (direction === 'left-bottom') {
-            currentPosX += additionX;
-            currentPosY += additionY;
-        } else if (direction === 'left-top') {
-            currentPosX += additionX;
-            currentPosY -= additionY;
-        } else if (direction === 'right-top') {
-            currentPosX -= additionX;
-            currentPosY -= additionY;
-        } else if (direction === 'right-bottom') {
-            currentPosX -= additionX;
-            currentPosY += additionY;
-        } else if (direction === 'left-bottom') {
-            currentPosX += additionX;
-            currentPosY += additionY;
+        if (ball.x <= 0) {
+            if (ball.direction === 'right-bottom') ball.direction = 'left-bottom';
+            else ball.direction = 'left-top';
         }
-        ballElement.style.left = `${currentPosX}px`;
-        ballElement.style.top = `${currentPosY}px`;
+        if (ball.y >= field.height - ball.height) {
+            if (ball.direction === 'left-bottom') ball.direction = 'left-top';
+            else ball.direction = 'right-top';
+        }
+        if (ball.x >= field.width - ball.width) {
+            if (ball.direction === 'left-top') ball.direction = 'right-top';
+            else ball.direction = 'right-bottom';
+        }
+    }
+    if (ball.direction === 'left-bottom') {
+        ball.x += ball.additionX;
+        ball.y += ball.additionY;
+        ball.direction = 'left-bottom';
+    } else if (ball.direction === 'left-top') {
+        ball.x += ball.additionX;
+        ball.y -= ball.additionY;
+        ball.direction = 'left-top';
+    } else if (ball.direction === 'right-top') {
+        ball.x -= ball.additionX;
+        ball.y -= ball.additionY;
+        ball.direction = 'right-top';
+    } else if (ball.direction === 'right-bottom') {
+        ball.x -= ball.additionX;
+        ball.y += ball.additionY;
+        ball.direction = 'right-bottom';
+    }
+    ball.trails++;
+    ballElement.style.left = `${ball.x}px`;
+    ballElement.style.top = `${ball.y}px`;
+    setTimeout(frame, 8);
+}
+
+const rect = fieldElement.getBoundingClientRect();
+
+const p2 = {
+  x: rect.left,
+  y: rect.top,
+};
+
+function mouseMove(e) {
+  const p1 = {
+    x: e.pageX,
+    y: e.pageY,
+  };
+  if (p1.y < p2.y || p1.y > p2.y + field.height || p1.x < p2.x || p1.x > p2.x + field.width) return;
+  const angle = (Math.atan2(p2.y - p1.y, p2.x - p1.x) * (180 / Math.PI));
+  if (angle > 90) ball.angle = 1;
+  else if (angle < 0 && angle > -90) ball.angle = 89;
+  else ball.angle = parseInt((Math.atan2(p2.y - p1.y, p2.x - p1.x) * (180 / Math.PI)) + 180);
+  angleLabel.innerHTML = `${ball.angle}°`;
+}
+
+function mouseClick(e) {
+    if (e.button === 0) {
+        window.removeEventListener('mousemove', mouseMove);
+        const { additionX, additionY } = getAxialAddition(ball.angle);
+        ball.additionX = additionX;
+        ball.additionY = additionY;
+        frame(ball.angle);
     }
 }
 
 async function main() {
     setBall(0, 0);
-    await moveBall(50);
+    generateFinish();
+    window.addEventListener('mouseup', mouseClick);
+    window.addEventListener('mousemove', mouseMove);
 }
 
 main();

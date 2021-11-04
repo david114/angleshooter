@@ -7,9 +7,27 @@
   <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
-    <div id="main-container">
+  <div id="main-container">
+    <div id="info">
+      <span class="label-span" style="display: block;">
+        <label for="angle-label">Winkel:</label>
+        <label class="bold-labels" style="float: right;" id="angle-label">0</label>
+      </span>
+      <span class="label-span" style="display: block;">
+        <label for="bounce-label">Bounces:</label>
+        <label class="bold-labels" style="float: right;" id="bounce-label">0</label>
+      </span>
+      <span class="label-span" style="display: block;">
+        <label for="trail-label">Trails:</label>
+        <label class="bold-labels" style="float: right;" id="trail-label">0</label>
+      </span>
+      <!-- <label id="bounce-label">Bounces: 0</label>
+      <label id="trail-label">Trails: 0</label> -->
+    </div>
+    <div id="playing-field">
       <div id="ball"></div>
     </div>
+  </div>
 </body>
 <script src="js/index.js" defer></script>
 </html>
