@@ -4,6 +4,7 @@ import 'regenerator-runtime/runtime';
 
 const fieldElement = document.getElementById('playing-field');
 const ballElement = document.getElementById('ball');
+const anglePreviewElement = document.getElementById('angle-preview');
 const bounceLabel = document.getElementById('bounce-label');
 const angleLabel = document.getElementById('angle-label');
 const trailLabel = document.getElementById('trail-label');
@@ -134,15 +135,9 @@ function getAxialAddition(angle) {
 function createTrail() {
     const trailElement = document.createElement('div');
     trailElement.classList = 'trail trailRemove';
-    if (ball.direction === 'left-top' || ball.direction === 'right-bottom') {
-        trailElement.style.left = `${parseInt(ballElement.style.left) + (ball.width / 2)}px`;
-        trailElement.style.top = ballElement.style.top;
-    } else {
-        trailElement.style.left = ballElement.style.left;
-        trailElement.style.top = ballElement.style.top;
-    }
+    trailElement.style.left = ballElement.style.left;
+    trailElement.style.top = ballElement.style.top;
     fieldElement.appendChild(trailElement);
-
     setTimeout(() => {
         trailElement.remove();
     }, 2500);
@@ -150,7 +145,7 @@ function createTrail() {
 
 async function frame() {
     if (await collisionCheck()) return;
-    if (ball.trails % 4 === 0) {
+    if (ball.trails % 2 === 0) {
         createTrail();
         trailLabel.innerHTML = fieldElement.children.length - 1;
     }
@@ -215,12 +210,14 @@ function mouseMove(e) {
   if (angle > 90) ball.angle = 1;
   else if (angle < 0 && angle > -90) ball.angle = 89;
   else ball.angle = parseInt((Math.atan2(p2.y - p1.y, p2.x - p1.x) * (180 / Math.PI)) + 180);
+  anglePreviewElement.style.webkitTransform = `rotate(${ball.angle}deg)`;
   angleLabel.innerHTML = `${ball.angle}°`;
 }
 
 function mouseClick(e) {
     if (e.button === 0) {
         window.removeEventListener('mousemove', mouseMove);
+        fieldElement.removeChild(anglePreviewElement);
         const { additionX, additionY } = getAxialAddition(ball.angle);
         ball.additionX = additionX;
         ball.additionY = additionY;

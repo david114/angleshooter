@@ -7,6 +7,13 @@
   <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
+  <div id="main-menu">
+    <label id="game-title">Angle Shooter</label>
+    <div id="wrapper-option-buttons">
+      <input class="option-button" type="button" value="Start">
+      <input class="option-button" type="button" value="Options">
+    </div>
+  </div>
   <div id="main-container">
     <div id="info">
       <span class="label-span" style="display: block;">
@@ -21,10 +28,9 @@
         <label for="trail-label">Trails:</label>
         <label class="bold-labels" style="float: right;" id="trail-label">0</label>
       </span>
-      <!-- <label id="bounce-label">Bounces: 0</label>
-      <label id="trail-label">Trails: 0</label> -->
     </div>
     <div id="playing-field">
+      <div id="angle-preview"></div>
       <div id="ball"></div>
     </div>
   </div>

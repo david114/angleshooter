@@ -1,0 +1,47 @@
+#main-menu {
+    width: 100vw;
+    height: 100vh;
+    background: #06070a;
+    position: relative;
+}
+
+#game-title {
+    font-size: 10vh;
+    top: 5vh;
+    color: rgb(210, 210, 210);
+    position: relative;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+    text-shadow: -1px -1px 5px cyan, 1px 1px 6px red;
+
+}
+
+#wrapper-option-buttons {
+    position: relative;
+    top: 25vh;
+    width: 50vw;
+    margin: 0 auto;
+}
+
+.option-button {
+    display: block;
+    margin: 0 auto;
+    width: 15vw;
+    height: 5vh;
+    color: white;
+    font-size: 2vh;
+    background: linear-gradient(180deg,#353a47,#13151a);
+    border: none;
+    margin-bottom: 30px;
+}
+
+.option-button:hover {
+    cursor: pointer;
+    background: linear-gradient(180deg,#3d4352,#1f222b);
+    /* text-shadow: 0 0 2px cyan; */
+    /* text-shadow: -1px -1px 1px rgb(0, 255, 191), 1px 1px 1px red;
+    outline: 1px solid red;
+    border: 1px solid rgb(0, 247, 255); */
+    /* filter: drop-shadow(0px 0px 5px rgba(0, 255, 0, 0.2)); */
+}
