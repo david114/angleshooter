@@ -5,23 +5,53 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="css/index.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="main-menu">
     <label id="game-title">Angle Shooter</label>
-    <div id="wrapper-option-buttons">
-      <input class="option-button" type="button" value="Start">
-      <input class="option-button" type="button" value="Options">
+    <div id="wrapper-main-menu">
+      <input class="option-button" id="start-button" type="button" value="Start">
+      <input class="option-button" id="option-button" type="button" value="Options">
+    </div>
+    <div id="wrapper-options">
+      <div class="option">
+        <!-- <div id="option-ball-color"></div> -->
+        <label>Ball Color</label>
+        <label class="right-alinged arrow arrow-right">❯</label>
+        <label class="right-alinged label-ball-color">Blau</label>
+        <label class="right-alinged arrow arrow-left">❮</label>
+      </div>
+      <div class="option">
+        <div id="option-sparkle-color"></div>
+        <label>Sparkle Color</label>
+        <label class="right-alinged arrow arrow-right">❯</label>
+        <label class="right-alinged label-ball-color">Blau</label>
+        <label class="right-alinged arrow arrow-left">❮</label>
+      </div>
+      <div class="option">
+        <!-- <div id="option-finish-color"></div> -->
+        <label>Goal Color</label>
+        <label class="right-alinged arrow arrow-right">❯</label>
+        <label class="right-alinged label-ball-color">Blau</label>
+        <label class="right-alinged arrow arrow-left">❮</label>
+      </div>
     </div>
   </div>
   <div id="main-container">
     <div id="info">
       <span class="label-span" style="display: block;">
-        <label for="angle-label">Winkel:</label>
+        <label for="time-label">Time:</label>
+        <label class="bold-labels" style="float: right;" id="time-label">00:00</label>
+      </span>
+      <span class="label-span" style="display: block;">
+        <label for="angle-label">Angle:</label>
         <label class="bold-labels" style="float: right;" id="angle-label">0</label>
       </span>
       <span class="label-span" style="display: block;">
-        <label for="bounce-label">Bounces:</label>
+        <label for="bounce-label">Impacts:</label>
         <label class="bold-labels" style="float: right;" id="bounce-label">0</label>
       </span>
       <span class="label-span" style="display: block;">
@@ -32,6 +62,7 @@
     <div id="playing-field">
       <div id="angle-preview"></div>
       <div id="ball"></div>
+      <div id="goal"></div>
     </div>
   </div>
 </body>

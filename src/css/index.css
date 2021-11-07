@@ -1,12 +1,13 @@
 @import './defaults.css';
 @import './menu.css';
+@import './options.css';
 
 * {
     font-family: system-ui;
 }
 
 body {
-    background-image: url("../img/grid.png");
+    background-image: url("../img/grid5.png");
     background-repeat: repeat;
     background-blend-mode: soft-light;
     background-color: hsl(231deg 98% 24%);
@@ -14,7 +15,7 @@ body {
 }
 
 #main-container {
-    display: none;
+    /* display: none; */
     position: relative;
     top: 50vh;
     transform: translateY(-50%);
@@ -29,18 +30,16 @@ body {
     margin: 0 auto;
     opacity: 0.9;
     background-color: #010022;
-    filter: drop-shadow(0px 0px 2.5px #010022);
 }
 
 #info {
     position: relative;
     width: 8vw;
-    height: 100px;
+    height: 132px;
     opacity: 0.8;
     margin-bottom: 20px;
     padding: 10px;
     background-color: #010022;
-    filter: drop-shadow(0px 0px 2.5px #010022);
 }
 
 .label-span {
@@ -63,8 +62,17 @@ label {
     height: 24px;
     border-radius: 25px;
     z-index: 2;
-    background-color: #0400ff;
-    filter: drop-shadow(0px 0px 8px #0400ff);
+    /* background-color: #008cff;
+    filter: drop-shadow(0px 0px 8px #008cff); */
+    background-color: red;
+    filter: drop-shadow(0px 0px 8px red);
+}
+
+.sparkle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: red;
 }
 
 #angle-preview {
@@ -81,19 +89,26 @@ label {
 
 .trail {
     position: absolute;
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
     border-radius: 50px;
-    opacity: 1;
-    filter: blur(6px);
-    box-shadow: 12px 12px 0px 4px #020072;
+    /* opacity: 0.1; */
+    border: none;
+    outline: none;
+    filter: blur(8px);
+    /* transform: rotate(8deg); */
+    /* box-shadow: 12px 12px 0px 4px #0400ff; */
+    box-shadow: 12px 12px 0px 4px rgb(77, 0, 0);
+    /* box-shadow: 12px 12px 0px 4px #011064; */
+
 }
 
-.finish {
+.goal {
     position: absolute;
     z-index: 3;
     background-color: gold;
-    filter: drop-shadow(0px 0px 2px white);
+    opacity: 1;
+    filter: drop-shadow(0px 0px 10px gold);
 }
 
 

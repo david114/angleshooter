@@ -1,0 +1,74 @@
+#wrapper-options {
+    display: none;
+    position: relative;
+    top: 25vh;
+    width: 50vw;
+    margin: 0 auto;
+}
+
+.option {
+    display: block;
+    margin: 0 auto;
+    width: 18vw;
+    height: 6vh;
+    min-width: 350px;
+    min-height: 50px;
+    font-size: 2vh;
+    border: none;
+    margin-bottom: 30px;
+    background-color: #010022;
+    opacity: 0.85;
+    padding: 25px;
+}
+
+
+/* #option-ball-color {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 25px;
+    z-index: 2;
+    background-color: #008cff;
+    filter: drop-shadow(0px 0px 8px #008cff);
+}
+
+#option-sparkle-color {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 25px;
+    z-index: 2;
+    background-color: red;
+    filter: drop-shadow(0px 0px 8px red);
+}
+
+#option-finish-color {
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    border-radius: 25px;
+    z-index: 2;
+    background-color: gold;
+    filter: drop-shadow(0px 0px 8px gold);
+} */
+
+.right-alinged {
+    float: right;
+}
+
+.arrow {
+    opacity: 0.1;
+}
+
+.arrow:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+
+.arrow-right {
+    margin-left: 80px;
+}
+
+.arrow-left {
+    margin-right: 80px;
+}
