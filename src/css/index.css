@@ -32,12 +32,29 @@ body {
     background-color: #010022;
 }
 
+#scoreboard {
+    float: right;
+    width: 8vw;
+    height: 132px;
+    opacity: 0.8;
+    background-color: #010022;
+    place-items: center;
+    display: grid;
+}
+
+#wrapper-info {
+    width: 80vw;
+    display: inline-block;
+}
+
 #info {
     position: relative;
+    float: right;
     width: 8vw;
     height: 132px;
     opacity: 0.8;
     margin-bottom: 20px;
+    margin-left: 20px;
     padding: 10px;
     background-color: #010022;
 }
@@ -45,6 +62,16 @@ body {
 .label-span {
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.span-level {
+    display: grid;
+    text-align: center;
+}
+
+#label-round {
+    font-size: 32px;
+    margin-bottom: 20px;
 }
 
 label {

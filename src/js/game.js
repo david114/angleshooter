@@ -1,16 +1,17 @@
 /* eslint-disable radix */
 /* eslint-disable max-len */
 import 'regenerator-runtime/runtime';
+import sounds from '../sound/*.mp3';
 import { time } from './time';
 import { goal } from './goal';
 import { ball } from './ball';
 import { field } from './field';
 
 export async function game() {
-    const bounceLabel = document.getElementById('bounce-label');
+    const impactLabel = document.getElementById('bounce-label');
     const angleLabel = document.getElementById('angle-label');
     const trailLabel = document.getElementById('trail-label');
-    // const anglePreview = document.getElementById('angle-preview');
+    const impactSound = new Audio(sounds.impact);
 
     function createTrail() {
         const trailElement = document.createElement('div');
@@ -30,13 +31,22 @@ export async function game() {
         ball.showAnglePreview();
         goal.generate(field);
         window.addEventListener('mousemove', mouseMove);
-        bounceLabel.innerHTML = 0;
-        trailLabel.innerHTML = 0;
+    }
+
+    function lost() {
+        resetGame();
+        field.resetRound(impactLabel);
+    }
+
+    function nextRound() {
+        resetGame();
+        field.nextRound(impactLabel);
     }
 
     async function mainRoutine() {
         if (await ball.reachedGoal(goal)) {
-            resetGame();
+            if (ball.bounces < field.round) lost();
+            else nextRound();
             return;
         }
         if (ball.trails % 4 === 0) {
@@ -45,9 +55,16 @@ export async function game() {
         }
         /* Nur der Winkel verändert sich, nicht die Zunahme/Abnahme der Position in X oder Y Richtung */
         if (ball.x >= field.width - ball.width || ball.y + ball.height >= field.height || ball.y <= 0 || ball.x <= 0) {
+            const soundCopy = impactSound.cloneNode(true);
+            soundCopy.volume = 0.1;
+            soundCopy.play();
             ball.sparkles(field.element);
             ball.bounces++;
-            bounceLabel.innerHTML = ball.bounces;
+            impactLabel.innerHTML = `${ball.bounces} / ${field.round}`;
+            if (ball.bounces > field.round) {
+                lost();
+                return;
+            }
             if (ball.y <= 0) {
                 if (ball.direction === 'left-top') ball.direction = 'left-bottom';
                 else ball.direction = 'right-bottom';
